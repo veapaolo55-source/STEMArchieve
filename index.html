@@ -128,13 +128,20 @@ function saveAnnouncement() {
     alert("Announcement saved!");
 }
 
+// ⭐ NEW: Save achievement
+function saveAchievement() {
+    let text = document.getElementById("achievementText").value;
+    localStorage.setItem("achievement", text);
+    alert("Achievement saved!");
+}
+
 function showContent(section) {
 
     let box = document.getElementById("contentBox");
 
     if (section === "home") {
         box.innerHTML = `
-            <h2>🏠 Home</h2>
+            <h2> Home</h2>
 
             <p>
                 Welcome to STEMArchive, a centralized digital platform
@@ -209,11 +216,31 @@ function showContent(section) {
         }
     }
 
+    // ⭐ UPDATED ACHIEVEMENTS SECTION
     if (section === "Students Achievements") {
+
+        let achievement =
+            localStorage.getItem("achievement") ||
+            "No achievements yet.";
+
         box.innerHTML = `
             <h2>STEM Achievements</h2>
-            <p>Wala pa.</p>
+            <p>${achievement}</p>
         `;
+
+        if (isAdmin) {
+            box.innerHTML += `
+                <textarea id="achievementText"
+                          rows="8"
+                          style="width:90%;">${achievement}</textarea>
+
+                <br><br>
+
+                <button onclick="saveAchievement()">
+                    Save Achievement
+                </button>
+            `;
+        }
     }
 
     box.style.display = "block";
