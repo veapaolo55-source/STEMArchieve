@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>STEMArchive</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            background:#f5f7fa;
+        }
+
+        header{
+            background:#6b0c0c;
+            color:white;
+            text-align:center;
+            padding:40px;
+        }
+
+        nav{
+            background:#440b13;
+            padding:15px;
+            text-align:center;
+        }
+
+        nav a{
+            color:rgb(221, 82, 82);
+            text-decoration:none;
+            margin:0 15px;
+        }
+
+        .hero{
+            text-align:center;
+            padding:60px 20px;
+        }
+
+        .button{
+            background:#6b0c0c;
+            color:white;
+            padding:12px 25px;
+            border-radius:8px;
+            text-decoration:none;
+        }
+
+        .categories{
+            display:flex;
+            justify-content:center;
+            gap:20px;
+            flex-wrap:wrap;
+            padding:30px;
+        }
+
+       .card{
+    background:rgb(231, 88, 88);
+    padding:30px;
+    width:80%;
+    min-height:400px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    text-align:center;
+    margin:auto;
+}
+
+        footer{
+            background:#440b13;
+            color:white;
+            text-align:center;
+            padding:50px;
+            margin-top:70px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>STEMArchive</h1>
+    <p>Your Digital Repository of STEM Learning Resources</p>
+</header>
+
+<nav>
+    <a href="#" onclick="showContent('home')">Home</a>
+    <a href="#" onclick="showContent('reviewers')">Reviewers</a>
+    <a href="#" onclick="showContent('announcements')">Announcements</a>
+    <a href="#" onclick="showContent('Students Achievements')">STEM Achievements</a>
+</nav>
+
+<div id="contentBox" class="card" style="display:none; margin:20px auto;">
+
+</div>
+
+<section class="hero">
+    <h2>Access, Share, and Learn Together</h2>
+    <p>Browse reviewers, notes, and study materials uploaded by STEM Officers.</p>
+</section>
+
+<br><br><br><br><br><br><br><br><br><br>
+
+<footer>
+    © 2026 StemArchive | The Cabatuan National High School STEM Club
+</footer>
+
+<script>
+let isAdmin = false;
+
+// Ask if user wants to log in as admin
+if (confirm("Log in as Admin?")) {
+    let username = prompt("Username:");
+    let password = prompt("Password:");
+
+    if (username === "STEMCLUBADMINS" && password === "stem6767") {
+        isAdmin = true;
+        alert("Welcome, Admin!");
+    } else {
+        alert("Wrong username or password. Viewing as Student.");
+    }
+}
+
+// Save reviewer
+function saveReviewer() {
+    let text = document.getElementById("reviewerText").value;
+    localStorage.setItem("reviewer", text);
+    alert("Reviewer saved!");
+}
+
+// Save announcement
+function saveAnnouncement() {
+    let text = document.getElementById("announcementText").value;
+    localStorage.setItem("announcement", text);
+    alert("Announcement saved!");
+}
+
+function showContent(section) {
+
+    let box = document.getElementById("contentBox");
+
+    if (section === "home") {
+        box.innerHTML = `
+            <h2>🏠 Home</h2>
+
+            <p>
+                Welcome to STEMArchive, a centralized digital platform
+                designed to support students in their academic journey.
+            </p>
+
+            <p>
+                This website provides easy access to organized reviewers,
+                important announcements, and essential learning materials.
+            </p>
+
+            <p>
+                It is built to help students stay updated, prepared,
+                and confident in their studies.
+            </p>
+
+            <p>
+                Explore the platform and stay ahead in your academic goals.
+            </p>
+        `;
+    }
+
+    if (section === "reviewers") {
+
+        let reviewer =
+            localStorage.getItem("reviewer") ||
+            "No reviewer yet.";
+
+        box.innerHTML = `
+            <h2>Reviewers</h2>
+            <p>${reviewer}</p>
+        `;
+
+        if (isAdmin) {
+            box.innerHTML += `
+                <textarea id="reviewerText"
+                          rows="8"
+                          style="width:90%;">${reviewer}</textarea>
+
+                <br><br>
+
+                <button onclick="saveReviewer()">
+                    Save Reviewer
+                </button>
+            `;
+        }
+    }
+
+    if (section === "announcements") {
+
+        let announcement =
+            localStorage.getItem("announcement") ||
+            "No announcements yet.";
+
+        box.innerHTML = `
+            <h2>Announcements</h2>
+            <p>${announcement}</p>
+        `;
+
+        if (isAdmin) {
+            box.innerHTML += `
+                <textarea id="announcementText"
+                          rows="8"
+                          style="width:90%;">${announcement}</textarea>
+
+                <br><br>
+
+                <button onclick="saveAnnouncement()">
+                    Save Announcement
+                </button>
+            `;
+        }
+    }
+
+    if (section === "Students Achievements") {
+        box.innerHTML = `
+            <h2>STEM Achievements</h2>
+            <p>Wala pa.</p>
+        `;
+    }
+
+    box.style.display = "block";
+}
+</script>
+
+</body>
+</html>
