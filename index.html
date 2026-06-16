@@ -172,59 +172,29 @@ function showContent(section) {
 
     if (section === "reviewers") {
 
-    let grade11 =
-        localStorage.getItem("grade11reviewers") ||
-        "No Grade 11 reviewers yet.";
+        let reviewer =
+            localStorage.getItem("reviewer") ||
+            "No reviewer yet.";
 
-    let grade12 =
-        localStorage.getItem("grade12reviewers") ||
-        "No Grade 12 reviewers yet.";
-
-    box.innerHTML = `
-        <h2> Reviewers</h2>
-
-        <div style="margin-bottom:40px;">
-            <h3>Grade 11</h3>
-            <div>${grade11}</div>
-        </div>
-
-        <div>
-            <h3>Grade 12</h3>
-            <div>${grade12}</div>
-        </div>
-    `;
-
-    if (isAdmin) {
-        box.innerHTML += `
-            <hr><br>
-
-            <h3>Edit Grade 11 Reviewers</h3>
-            <textarea id="grade11Text"
-                rows="8"
-                style="width:90%;">${grade11}</textarea>
-
-            <br><br>
-
-            <button onclick="saveGrade11()">
-                Save Grade 11
-            </button>
-
-            <br><br><br>
-
-            <h3>Edit Grade 12 Reviewers</h3>
-            <textarea id="grade12Text"
-                rows="8"
-                style="width:90%;">${grade12}</textarea>
-
-            <br><br>
-
-            <button onclick="saveGrade12()">
-                Save Grade 12
-            </button>
+        box.innerHTML = `
+            <h2>Reviewers</h2>
+            <p>${reviewer}</p>
         `;
+
+        if (isAdmin) {
+            box.innerHTML += `
+                <textarea id="reviewerText"
+                          rows="8"
+                          style="width:90%;">${reviewer}</textarea>
+
+                <br><br>
+
+                <button onclick="saveReviewer()">
+                    Save Reviewer
+                </button>
+            `;
+        }
     }
-}
-    
 
     if (section === "announcements") {
 
@@ -252,6 +222,7 @@ function showContent(section) {
         }
     }
 
+    // ⭐ UPDATED ACHIEVEMENTS SECTION
     if (section === "Students Achievements") {
 
         let achievement =
