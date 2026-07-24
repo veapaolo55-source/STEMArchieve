@@ -107,7 +107,7 @@
 <script>
 let isAdmin = false;
 
-// Ask if user wants to log in as admin
+
 if (confirm("Log in as Admin?")) {
     let username = prompt("Username:");
     let password = prompt("Password:");
@@ -120,21 +120,21 @@ if (confirm("Log in as Admin?")) {
     }
 }
 
-// Save reviewer
+
 function saveReviewer() {
     let text = document.getElementById("reviewerText").value;
     localStorage.setItem("reviewer", text);
     alert("Reviewer saved!");
 }
 
-// Save announcement
+
 function saveAnnouncement() {
     let text = document.getElementById("announcementText").value;
     localStorage.setItem("announcement", text);
     alert("Announcement saved!");
 }
 
-// ⭐ NEW: Save achievement
+
 function saveAchievement() {
     let text = document.getElementById("achievementText").value;
     localStorage.setItem("achievement", text);
@@ -222,7 +222,6 @@ function showContent(section) {
         }
     }
 
-    // ⭐ UPDATED ACHIEVEMENTS SECTION
     if (section === "Students Achievements") {
 
         let achievement =
