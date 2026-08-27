@@ -3,6 +3,7 @@
 <head>
     <title>STEMArchive</title>
 
+    <!-- Google Fonts: Marykate for Home Content, Plus Jakarta Sans for the rest -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Marykate&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -130,12 +131,6 @@
         /* Specific Marykate Font Styling for Home Content */
         .home-font {
             font-family: 'Marykate', cursive, sans-serif !important;
-        }
-
-        .home-font h2 {
-            font-size: 2.8rem !important;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
         }
 
         .home-font p {
@@ -309,7 +304,6 @@ async function showContent(section) {
     if (section === "home") {
         box.className = "card home-font"; // Applies Marykate font to Home section only
         box.innerHTML = `
-            <h2>Home</h2>
             <p>Welcome to STEMArchive, a centralized digital platform designed to support students in their academic journey.</p>
             <p>This website provides easy access to organized reviewers, important announcements, and essential learning materials.</p>
             <p>It is built to help students stay updated, prepared, and confident in their studies.</p>
