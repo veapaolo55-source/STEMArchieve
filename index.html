@@ -41,9 +41,7 @@
             padding: 12px 25px;
             border-radius: 8px;
             text-decoration: none;
-            border: none;
-            cursor: pointer;
-            margin: 5px;
+            display: inline-block;
         }
 
         .card {
@@ -57,12 +55,13 @@
             margin: auto;
         }
 
-        .file-card {
+        .pdf-card {
             background: white;
-            padding: 15px;
-            margin: 10px auto;
-            border-radius: 8px;
+            padding: 20px;
+            margin: 15px auto;
             width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         footer {
@@ -73,8 +72,8 @@
             margin-top: 70px;
         }
 
-        #uploadStatus {
-            font-weight: bold;
+        textarea {
+            padding: 10px;
         }
     </style>
 </head>
@@ -86,17 +85,29 @@
     <p>Your Digital Repository of STEM Learning Resources</p>
 </header>
 
+
 <nav>
-    <a onclick="showContent('home')">Home</a>
-    <a onclick="showContent('reviewers')">Reviewers</a>
-    <a onclick="showContent('announcements')">Announcements</a>
-    <a onclick="showContent('achievements')">STEM Achievements</a>
+    <a href="#" onclick="showContent('home'); return false;">Home</a>
+
+    <a href="#" onclick="showContent('reviewers'); return false;">
+        Reviewers
+    </a>
+
+    <a href="#" onclick="showContent('announcements'); return false;">
+        Announcements
+    </a>
+
+    <a href="#" onclick="showContent('achievements'); return false;">
+        STEM Achievements
+    </a>
 </nav>
+
 
 <div id="contentBox"
      class="card"
      style="display:none; margin:20px auto;">
 </div>
+
 
 <section class="hero">
 
@@ -107,70 +118,29 @@
         uploaded by STEM Officers.
     </p>
 
-    <img src="logo.jpg"
-         alt="STEM Club Logo"
-         style="width:300px; margin-top:20px; border-radius:10px;">
+    <div style="text-align:center;">
+
+        <img src="logo.jpg"
+             alt="STEM Club Logo"
+             style="width:300px;
+                    margin-top:20px;
+                    border-radius:10px;">
+
+    </div>
 
 </section>
 
+
+<br><br><br><br><br>
+
+
 <footer>
-    © 2026 STEMArchive | The Cabatuan National High School STEM Club
+    © 2026 STEMArchive |
+    The Cabatuan National High School STEM Club
 </footer>
 
 
-<script type="module">
-
-/* =========================
-   FIREBASE IMPORTS
-========================= */
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-import {
-    getStorage,
-    ref,
-    uploadBytes,
-    getDownloadURL,
-    listAll,
-    deleteObject
-}
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
-
-
-/* =========================
-   FIREBASE CONFIG
-========================= */
-
-/*
-PASTE YOUR FIREBASE CONFIG HERE
-*/
-
-const firebaseConfig = {
-
-    apiKey: "PASTE_HERE",
-
-    authDomain: "PASTE_HERE",
-
-    projectId: "PASTE_HERE",
-
-    storageBucket: "PASTE_HERE",
-
-    messagingSenderId: "PASTE_HERE",
-
-    appId: "PASTE_HERE"
-
-};
-
-
-/* =========================
-   INITIALIZE FIREBASE
-========================= */
-
-const app = initializeApp(firebaseConfig);
-
-const storage = getStorage(app);
-
+<script>
 
 /* =========================
    ADMIN LOGIN
@@ -192,7 +162,9 @@ if (confirm("Log in as Admin?")) {
         isAdmin = true;
         alert("Welcome, Admin!");
 
-    } else {
+    }
+
+    else {
 
         alert("Viewing as Student.");
 
@@ -201,167 +173,119 @@ if (confirm("Log in as Admin?")) {
 
 
 /* =========================
-   UPLOAD PDF
+   PDF REVIEWERS
 ========================= */
 
-window.uploadPDF = async function() {
+/*
+    ADD YOUR PDF FILES HERE.
 
-    const input =
-        document.getElementById("pdfUpload");
+    The PDFs must be inside:
 
-    const files = input.files;
+    reviewers/
+
+    folder in your GitHub repository.
+*/
 
 
-    if (files.length === 0) {
+const reviewers = [
 
-        alert("Please select PDF files first.");
+    {
+        title: "Biology Reviewer",
+        file: "reviewers/biology.pdf"
+    },
 
-        return;
+    {
+        title: "Chemistry Reviewer",
+        file: "reviewers/chemistry.pdf"
+    },
+
+    {
+        title: "Physics Reviewer",
+        file: "reviewers/physics.pdf"
+    },
+
+    {
+        title: "Mathematics Reviewer",
+        file: "reviewers/mathematics.pdf"
+    },
+
+    {
+        title: "Research Reviewer",
+        file: "reviewers/research.pdf"
     }
 
+    /*
+    ADD MORE HERE
 
-    /* Maximum 10 files */
+    You can add up to around 15 files.
 
-    if (files.length > 10) {
+    Example:
 
-        alert("Maximum of 10 files at a time.");
-
-        return;
+    ,
+    {
+        title: "Calculus Reviewer",
+        file: "reviewers/calculus.pdf"
     }
+    */
 
-
-    const status =
-        document.getElementById("uploadStatus");
-
-
-    for (const file of files) {
-
-
-        /* Check PDF */
-
-        if (file.type !== "application/pdf") {
-
-            alert(
-                file.name +
-                " is not a PDF."
-            );
-
-            continue;
-        }
-
-
-        /* Maximum 2 MB per file */
-
-        if (file.size > 2 * 1024 * 1024) {
-
-            alert(
-                file.name +
-                " is larger than 2 MB."
-            );
-
-            continue;
-        }
-
-
-        status.innerHTML =
-            "Uploading: " + file.name;
-
-
-        /* Create file location */
-
-        const fileRef = ref(
-            storage,
-            "reviewers/" +
-            Date.now() +
-            "_" +
-            file.name
-        );
-
-
-        try {
-
-            await uploadBytes(
-                fileRef,
-                file
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(error);
-
-            alert(
-                "Upload failed: " +
-                file.name
-            );
-
-        }
-
-    }
-
-
-    status.innerHTML =
-        "Upload complete!";
-
-
-    alert("PDF files uploaded successfully!");
-
-    showContent("reviewers");
-
-};
+];
 
 
 /* =========================
-   DELETE PDF
+   SAVE ANNOUNCEMENT
 ========================= */
 
-window.deletePDF = async function(filePath) {
+function saveAnnouncement() {
 
-    if (!confirm("Delete this PDF?")) {
-        return;
-    }
+    let text =
+        document.getElementById(
+            "announcementText"
+        ).value;
+
+    localStorage.setItem(
+        "announcement",
+        text
+    );
+
+    alert("Announcement saved!");
+
+}
 
 
-    try {
+/* =========================
+   SAVE ACHIEVEMENT
+========================= */
 
-        const fileRef =
-            ref(storage, filePath);
+function saveAchievement() {
 
-        await deleteObject(fileRef);
+    let text =
+        document.getElementById(
+            "achievementText"
+        ).value;
 
-        alert("PDF deleted!");
+    localStorage.setItem(
+        "achievement",
+        text
+    );
 
-        showContent("reviewers");
+    alert("Achievement saved!");
 
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        alert("Could not delete PDF.");
-
-    }
-
-};
+}
 
 
 /* =========================
    SHOW CONTENT
 ========================= */
 
-window.showContent =
-async function(section) {
+function showContent(section) {
 
-    const box =
+    let box =
         document.getElementById("contentBox");
 
 
-    box.style.display = "block";
-
-
-    /* HOME */
+    /* =====================
+       HOME
+    ===================== */
 
     if (section === "home") {
 
@@ -376,6 +300,17 @@ async function(section) {
             </p>
 
             <p>
+                This website provides easy access to
+                organized reviewers, important announcements,
+                and essential learning materials.
+            </p>
+
+            <p>
+                It is built to help students stay updated,
+                prepared, and confident in their studies.
+            </p>
+
+            <p>
                 Explore the platform and stay ahead
                 in your academic goals.
             </p>
@@ -385,184 +320,77 @@ async function(section) {
     }
 
 
-    /* =========================
+    /* =====================
        REVIEWERS
-    ========================= */
+    ===================== */
 
     if (section === "reviewers") {
 
         box.innerHTML = `
 
-            <h2>Reviewers</h2>
+            <h2>📚 STEM Reviewers</h2>
 
             <p>
-                Browse and download STEM learning
-                materials.
+                Browse and access available STEM
+                learning materials.
             </p>
-
-            <div id="fileList">
-                Loading files...
-            </div>
 
         `;
 
 
-        /* ADMIN UPLOAD SECTION */
-
-        if (isAdmin) {
+        if (reviewers.length === 0) {
 
             box.innerHTML += `
 
-                <hr>
-
-                <h3>Upload PDF Reviewers</h3>
-
-                <p>
-                    Maximum: 10 files at once<br>
-                    Maximum size: 2 MB per file
-                </p>
-
-                <input
-                    type="file"
-                    id="pdfUpload"
-                    accept=".pdf"
-                    multiple
-                >
-
-                <br><br>
-
-                <button
-                    class="button"
-                    onclick="uploadPDF()">
-
-                    Upload PDFs
-
-                </button>
-
-                <p id="uploadStatus"></p>
+                <p>No reviewers available yet.</p>
 
             `;
 
         }
 
 
-        /* LOAD FILES */
+        reviewers.forEach(function(reviewer) {
 
-        const list =
-            document.getElementById("fileList");
+            box.innerHTML += `
 
+                <div class="pdf-card">
 
-        try {
+                    <h3>
+                        📄 ${reviewer.title}
+                    </h3>
 
-            const folderRef =
-                ref(storage, "reviewers");
+                    <a
+                        href="${reviewer.file}"
+                        target="_blank"
+                        class="button">
 
-            const result =
-                await listAll(folderRef);
+                        Open PDF
 
+                    </a>
 
-            if (result.items.length === 0) {
+                </div>
 
-                list.innerHTML =
-                    "No reviewers uploaded yet.";
+            `;
 
-                return;
-
-            }
-
-
-            list.innerHTML = "";
-
-
-            for (const item of result.items) {
-
-                const url =
-                    await getDownloadURL(item);
-
-
-                let cleanName =
-                    item.name.replace(
-                        /^[0-9]+_/,
-                        ""
-                    );
-
-
-                let html = `
-
-                    <div class="file-card">
-
-                        <strong>
-                            📄 ${cleanName}
-                        </strong>
-
-                        <br><br>
-
-                        <a
-                            href="${url}"
-                            target="_blank"
-                            class="button">
-
-                            Open PDF
-
-                        </a>
-
-                `;
-
-
-                if (isAdmin) {
-
-                    html += `
-
-                        <button
-                            class="button"
-                            onclick="deletePDF('${item.fullPath}')">
-
-                            Delete
-
-                        </button>
-
-                    `;
-
-                }
-
-
-                html += `</div>`;
-
-
-                list.innerHTML += html;
-
-            }
-
-        }
-
-        catch (error) {
-
-            console.error(error);
-
-            list.innerHTML =
-
-                "Could not load reviewers. " +
-                "Check Firebase configuration.";
-
-        }
+        });
 
     }
 
 
-    /* =========================
+    /* =====================
        ANNOUNCEMENTS
-    ========================= */
+    ===================== */
 
     if (section === "announcements") {
 
         let announcement =
-            localStorage.getItem("announcement")
-            || "No announcements yet.";
+            localStorage.getItem("announcement") ||
+            "No announcements yet.";
 
 
         box.innerHTML = `
 
-            <h2>Announcements</h2>
+            <h2>📢 Announcements</h2>
 
             <p>${announcement}</p>
 
@@ -596,74 +424,56 @@ async function(section) {
     }
 
 
-    /* =========================
+    /* =====================
        ACHIEVEMENTS
-    ========================= */
+    ===================== */
 
     if (section === "achievements") {
 
         let achievement =
-            localStorage.getItem("achievement")
-            || "No achievements yet.";
+            localStorage.getItem("achievement") ||
+            "No achievements yet.";
 
 
         box.innerHTML = `
 
-            <h2>STEM Achievements</h2>
+            <h2>🏆 STEM Achievements</h2>
 
             <p>${achievement}</p>
 
         `;
 
+
+        if (isAdmin) {
+
+            box.innerHTML += `
+
+                <textarea
+                    id="achievementText"
+                    rows="8"
+                    style="width:90%;"
+                >${achievement}</textarea>
+
+                <br><br>
+
+                <button
+                    class="button"
+                    onclick="saveAchievement()">
+
+                    Save Achievement
+
+                </button>
+
+            `;
+
+        }
+
     }
 
-};
 
+    box.style.display = "block";
 
-/* =========================
-   SAVE ANNOUNCEMENT
-========================= */
-
-window.saveAnnouncement = function() {
-
-    const text =
-        document.getElementById(
-            "announcementText"
-        ).value;
-
-
-    localStorage.setItem(
-        "announcement",
-        text
-    );
-
-
-    alert("Announcement saved!");
-
-};
-
-
-/* =========================
-   SAVE ACHIEVEMENT
-========================= */
-
-window.saveAchievement = function() {
-
-    const text =
-        document.getElementById(
-            "achievementText"
-        ).value;
-
-
-    localStorage.setItem(
-        "achievement",
-        text
-    );
-
-
-    alert("Achievement saved!");
-
-};
+}
 
 </script>
 
