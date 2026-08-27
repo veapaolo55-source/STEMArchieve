@@ -85,6 +85,7 @@
     <p>Your Digital Repository of STEM Learning Resources</p>
 </header>
 
+
 <nav>
     <a href="#" onclick="showContent('home'); return false;">Home</a>
     <a href="#" onclick="showContent('reviewers'); return false;">Reviewers</a>
@@ -92,9 +93,11 @@
     <a href="#" onclick="showContent('achievements'); return false;">STEM Achievements</a>
 </nav>
 
+
 <div id="contentBox" class="card" style="display:none; margin:20px auto;"></div>
 
-<section class="hero" id="heroSection">
+
+<section class="hero">
     <h2>Access, Share, and Learn Together</h2>
     <p>Browse reviewers, notes, and study materials uploaded by STEM Officers.</p>
     <div style="text-align:center;">
@@ -102,11 +105,21 @@
     </div>
 </section>
 
+
+<br><br><br><br><br>
+
+
 <footer>
     © 2026 STEMArchive | The Cabatuan National High School STEM Club
 </footer>
 
+
 <script>
+
+/* =========================
+   ADMIN LOGIN
+========================= */
+
 let isAdmin = false;
 
 if (confirm("Log in as Admin?")) {
@@ -121,28 +134,30 @@ if (confirm("Log in as Admin?")) {
     }
 }
 
+
+/* =========================
+   PDF REVIEWERS
+========================= */
+
 const reviewers = [
     {
-        title: "PRACTICAL RESEARCH 2 Reviewer",
-        file: "reviewers/biology.pdf"
+        title: "UNDERSTANDING CULTURE, SOCIETY AND POLITICS (UCSP)",
+        file: "UNDERSTANDING-CULTURE-SOCIETY-AND-POLITICS-UCSP.pdf"
     },
     {
-        title: "Chemistry Reviewer",
-        file: "reviewers/chemistry.pdf"
-    },
-    {
-        title: "UCSP Reviewer",
-        file: "reviewers/physics.pdf"
-    },
-    {
-        title: "MIL Reviewer",
+        title: "MEDIA AND INFORMATION LITERACY",
         file: "MEDIA-AND-INFORMATION-LITERACY.pdf"
     },
     {
-        title: "PHILOSOPHY Reviewer",
-        file: "reviewers/research.pdf"
+        title: "PRACTICAL RESEARCH 2",
+        file: "PRACTICAL-RESEARCH-2.pdf"
     }
 ];
+
+
+/* =========================
+   SAVE ANNOUNCEMENT
+========================= */
 
 function saveAnnouncement() {
     let text = document.getElementById("announcementText").value;
@@ -150,11 +165,21 @@ function saveAnnouncement() {
     alert("Announcement saved!");
 }
 
+
+/* =========================
+   SAVE ACHIEVEMENT
+========================= */
+
 function saveAchievement() {
     let text = document.getElementById("achievementText").value;
     localStorage.setItem("achievement", text);
     alert("Achievement saved!");
 }
+
+
+/* =========================
+   SHOW CONTENT
+========================= */
 
 function showContent(section) {
     let box = document.getElementById("contentBox");
@@ -225,6 +250,7 @@ function showContent(section) {
 
     box.style.display = "block";
 }
+
 </script>
 
 </body>
