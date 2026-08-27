@@ -85,7 +85,6 @@
     <p>Your Digital Repository of STEM Learning Resources</p>
 </header>
 
-
 <nav>
     <a href="#" onclick="showContent('home'); return false;">Home</a>
     <a href="#" onclick="showContent('reviewers'); return false;">Reviewers</a>
@@ -93,9 +92,7 @@
     <a href="#" onclick="showContent('achievements'); return false;">STEM Achievements</a>
 </nav>
 
-
 <div id="contentBox" class="card" style="display:none; margin:20px auto;"></div>
-
 
 <section class="hero">
     <h2>Access, Share, and Learn Together</h2>
@@ -105,21 +102,11 @@
     </div>
 </section>
 
-
-<br><br><br><br><br>
-
-
 <footer>
     © 2026 STEMArchive | The Cabatuan National High School STEM Club
 </footer>
 
-
 <script>
-
-/* =========================
-   ADMIN LOGIN
-========================= */
-
 let isAdmin = false;
 
 if (confirm("Log in as Admin?")) {
@@ -133,11 +120,6 @@ if (confirm("Log in as Admin?")) {
         alert("Viewing as Student.");
     }
 }
-
-
-/* =========================
-   PDF REVIEWERS
-========================= */
 
 const reviewers = [
     {
@@ -154,32 +136,17 @@ const reviewers = [
     }
 ];
 
-
-/* =========================
-   SAVE ANNOUNCEMENT
-========================= */
-
 function saveAnnouncement() {
     let text = document.getElementById("announcementText").value;
     localStorage.setItem("announcement", text);
     alert("Announcement saved!");
 }
 
-
-/* =========================
-   SAVE ACHIEVEMENT
-========================= */
-
 function saveAchievement() {
     let text = document.getElementById("achievementText").value;
     localStorage.setItem("achievement", text);
     alert("Achievement saved!");
 }
-
-
-/* =========================
-   SHOW CONTENT
-========================= */
 
 function showContent(section) {
     let box = document.getElementById("contentBox");
@@ -250,7 +217,6 @@ function showContent(section) {
 
     box.style.display = "block";
 }
-
 </script>
 
 </body>
