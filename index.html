@@ -42,6 +42,8 @@
             border-radius: 8px;
             text-decoration: none;
             display: inline-block;
+            border: none;
+            cursor: pointer;
         }
 
         .card {
@@ -107,6 +109,10 @@
 </footer>
 
 <script>
+// JSONBin Configuration
+const BIN_ID = "6a8fa43fda38895dfe1602f8"; 
+const MASTER_KEY = "PASTE_YOUR_MASTER_KEY_HERE"; // Replace this string with your actual X-Master-Key from jsonbin.io
+
 let isAdmin = false;
 
 if (confirm("Log in as Admin?")) {
@@ -136,19 +142,49 @@ const reviewers = [
     }
 ];
 
-function saveAnnouncement() {
+async function fetchBinData() {
+    try {
+        let response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { "X-Master-Key": MASTER_KEY }
+        });
+        let result = await response.json();
+        return result.record;
+    } catch (e) {
+        return { announcement: "Error loading content.", achievement: "Error loading content." };
+    }
+}
+
+async function updateBinData(field, value) {
+    let currentData = await fetchBinData();
+    currentData[field] = value;
+
+    let response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": MASTER_KEY
+        },
+        body: JSON.stringify(currentData)
+    });
+
+    if (response.ok) {
+        alert("Updated successfully! Your classmates will now see this on their devices.");
+    } else {
+        alert("Failed to save update. Check your Master Key.");
+    }
+}
+
+async function saveAnnouncement() {
     let text = document.getElementById("announcementText").value;
-    localStorage.setItem("announcement", text);
-    alert("Announcement saved!");
+    await updateBinData("announcement", text);
 }
 
-function saveAchievement() {
+async function saveAchievement() {
     let text = document.getElementById("achievementText").value;
-    localStorage.setItem("achievement", text);
-    alert("Achievement saved!");
+    await updateBinData("achievement", text);
 }
 
-function showContent(section) {
+async function showContent(section) {
     let box = document.getElementById("contentBox");
 
     if (section === "home") {
@@ -182,7 +218,9 @@ function showContent(section) {
     }
 
     if (section === "announcements") {
-        let announcement = localStorage.getItem("announcement") || "No announcements yet.";
+        box.innerHTML = `<h2>📢 Announcements</h2><p>Loading latest announcements...</p>`;
+        let data = await fetchBinData();
+        let announcement = data.announcement || "No announcements yet.";
 
         box.innerHTML = `
             <h2>📢 Announcements</h2>
@@ -199,7 +237,9 @@ function showContent(section) {
     }
 
     if (section === "achievements") {
-        let achievement = localStorage.getItem("achievement") || "No achievements yet.";
+        box.innerHTML = `<h2>🏆 STEM Achievements</h2><p>Loading latest achievements...</p>`;
+        let data = await fetchBinData();
+        let achievement = data.achievement || "No achievements yet.";
 
         box.innerHTML = `
             <h2>🏆 STEM Achievements</h2>
