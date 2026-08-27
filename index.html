@@ -114,6 +114,12 @@
             margin-top: 0;
         }
 
+        /* Ensures line breaks created by Shift+Enter/Enter are respected */
+        .card p, .preserve-breaks {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
         .section-divider {
             border: 0;
             height: 1px;
@@ -175,6 +181,7 @@
             outline: none;
             resize: vertical;
             box-sizing: border-box;
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -350,9 +357,11 @@ async function showContent(section) {
         let data = await fetchBinData();
         let announcement = data.announcement || "No announcements yet.";
 
+        let formattedAnnouncement = announcement.replace(/\n/g, "<br>");
+
         box.innerHTML = `
             <h2>Announcements</h2>
-            <p>${announcement}</p>
+            <p class="preserve-breaks">${formattedAnnouncement}</p>
         `;
 
         if (isAdmin) {
@@ -395,20 +404,24 @@ async function showContent(section) {
                 <button class="button" onclick="saveAchievements()">Save Achievements</button>
             `;
         } else {
+            let posText = (ach.poseidon || 'No achievements listed.').replace(/\n/g, '<br>');
+            let archText = (ach.archimedes || 'No achievements listed.').replace(/\n/g, '<br>');
+            let hipText = (ach.hippocrates || 'No achievements listed.').replace(/\n/g, '<br>');
+
             box.innerHTML = `
                 <h2>STEM Achievements</h2>
                 
                 <hr class="section-divider">
                 <div class="section-title">Grade-12 Poseidon</div>
-                <p>${ach.poseidon || 'No achievements listed.'}</p>
+                <p class="preserve-breaks">${posText}</p>
                 
                 <hr class="section-divider">
                 <div class="section-title">Grade-11 Archimedes</div>
-                <p>${ach.archimedes || 'No achievements listed.'}</p>
+                <p class="preserve-breaks">${archText}</p>
                 
                 <hr class="section-divider">
                 <div class="section-title">Grade-11 Hippocrates</div>
-                <p>${ach.hippocrates || 'No achievements listed.'}</p>
+                <p class="preserve-breaks">${hipText}</p>
             `;
         }
     }
