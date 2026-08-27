@@ -96,14 +96,14 @@
         }
 
         .card {
-            background: #900C3F; /* Scarlet Color */
+            background: #1e293b; /* Dark slate tone - distinct contrast from header */
             color: white;
             padding: 40px 30px;
             width: 80%;
             max-width: 850px;
             min-height: 380px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
             text-align: center;
             margin: auto;
         }
@@ -117,7 +117,7 @@
         .section-divider {
             border: 0;
             height: 1px;
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.2);
             margin: 25px 0;
         }
 
@@ -125,7 +125,7 @@
             font-size: 1.3rem;
             font-weight: 700;
             margin: 15px 0 10px 0;
-            color: #ffffff;
+            color: #f87171;
         }
 
         /* Specific Marykate Font Styling for Home Content */
@@ -145,13 +145,13 @@
         }
 
         .pdf-card {
-            background: white;
+            background: #ffffff;
             color: #0f172a;
             padding: 24px;
             margin: 20px auto;
             width: 85%;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .pdf-card h3 {
@@ -372,7 +372,7 @@ async function showContent(section) {
 
         if (isAdmin) {
             box.innerHTML = `
-                2>STEM Achievements</h2>
+                <h2>STEM Achievements</h2>
                 
                 <hr class="section-divider">
                 <div class="section-title">Grade-12 Poseidon</div>
