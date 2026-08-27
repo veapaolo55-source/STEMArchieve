@@ -96,14 +96,14 @@
         }
 
         .card {
-            background: rgb(231, 88, 88);
+            background: #900C3F; /* Scarlet Color */
             color: white;
             padding: 40px 30px;
             width: 80%;
             max-width: 850px;
             min-height: 380px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
             text-align: center;
             margin: auto;
         }
@@ -112,6 +112,20 @@
             font-weight: 800;
             letter-spacing: -0.02em;
             margin-top: 0;
+        }
+
+        .section-divider {
+            border: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.35);
+            margin: 25px 0;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 15px 0 10px 0;
+            color: #ffffff;
         }
 
         /* Specific Marykate Font Styling for Home Content */
@@ -166,6 +180,7 @@
             border: 1px solid #cbd5e1;
             outline: none;
             resize: vertical;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -244,7 +259,14 @@ async function fetchBinData() {
         let result = await response.json();
         return result.record;
     } catch (e) {
-        return { announcement: "Error loading content.", achievement: "Error loading content." };
+        return { 
+            announcement: "Error loading content.", 
+            achievements: {
+                poseidon: "Error loading content.",
+                archimedes: "Error loading content.",
+                hippocrates: "Error loading content."
+            }
+        };
     }
 }
 
@@ -273,9 +295,13 @@ async function saveAnnouncement() {
     await updateBinData("announcement", text);
 }
 
-async function saveAchievement() {
-    let text = document.getElementById("achievementText").value;
-    await updateBinData("achievement", text);
+async function saveAchievements() {
+    let achievementsData = {
+        poseidon: document.getElementById("poseidonText").value,
+        archimedes: document.getElementById("archimedesText").value,
+        hippocrates: document.getElementById("hippocratesText").value
+    };
+    await updateBinData("achievements", achievementsData);
 }
 
 async function showContent(section) {
@@ -337,18 +363,47 @@ async function showContent(section) {
         box.className = "card";
         box.innerHTML = `<h2>STEM Achievements</h2><p>Loading latest achievements...</p>`;
         let data = await fetchBinData();
-        let achievement = data.achievement || "No achievements yet.";
-
-        box.innerHTML = `
-            <h2>STEM Achievements</h2>
-            <p>${achievement}</p>
-        `;
+        
+        let ach = data.achievements || {
+            poseidon: "No achievements listed.",
+            archimedes: "No achievements listed.",
+            hippocrates: "No achievements listed."
+        };
 
         if (isAdmin) {
-            box.innerHTML += `
-                <textarea id="achievementText" rows="8" style="width:90%;">${achievement}</textarea>
+            box.innerHTML = `
+                2>STEM Achievements</h2>
+                
+                <hr class="section-divider">
+                <div class="section-title">Grade-12 Poseidon</div>
+                <textarea id="poseidonText" rows="4" style="width:90%;">${ach.poseidon || ''}</textarea>
+                
+                <hr class="section-divider">
+                <div class="section-title">Grade-11 Archimedes</div>
+                <textarea id="archimedesText" rows="4" style="width:90%;">${ach.archimedes || ''}</textarea>
+                
+                <hr class="section-divider">
+                <div class="section-title">Grade-11 Hippocrates</div>
+                <textarea id="hippocratesText" rows="4" style="width:90%;">${ach.hippocrates || ''}</textarea>
+                
                 <br><br>
-                <button class="button" onclick="saveAchievement()">Save Achievement</button>
+                <button class="button" onclick="saveAchievements()">Save Achievements</button>
+            `;
+        } else {
+            box.innerHTML = `
+                <h2>STEM Achievements</h2>
+                
+                <hr class="section-divider">
+                <div class="section-title">Grade-12 Poseidon</div>
+                <p>${ach.poseidon || 'No achievements listed.'}</p>
+                
+                <hr class="section-divider">
+                <div class="section-title">Grade-11 Archimedes</div>
+                <p>${ach.archimedes || 'No achievements listed.'}</p>
+                
+                <hr class="section-divider">
+                <div class="section-title">Grade-11 Hippocrates</div>
+                <p>${ach.hippocrates || 'No achievements listed.'}</p>
             `;
         }
     }
