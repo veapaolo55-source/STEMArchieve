@@ -85,396 +85,146 @@
     <p>Your Digital Repository of STEM Learning Resources</p>
 </header>
 
-
 <nav>
     <a href="#" onclick="showContent('home'); return false;">Home</a>
-
-    <a href="#" onclick="showContent('reviewers'); return false;">
-        Reviewers
-    </a>
-
-    <a href="#" onclick="showContent('announcements'); return false;">
-        Announcements
-    </a>
-
-    <a href="#" onclick="showContent('achievements'); return false;">
-        STEM Achievements
-    </a>
+    <a href="#" onclick="showContent('reviewers'); return false;">Reviewers</a>
+    <a href="#" onclick="showContent('announcements'); return false;">Announcements</a>
+    <a href="#" onclick="showContent('achievements'); return false;">STEM Achievements</a>
 </nav>
 
+<div id="contentBox" class="card" style="display:none; margin:20px auto;"></div>
 
-<div id="contentBox"
-     class="card"
-     style="display:none; margin:20px auto;">
-</div>
-
-
-<section class="hero">
-
+<section class="hero" id="heroSection">
     <h2>Access, Share, and Learn Together</h2>
-
-    <p>
-        Browse reviewers, notes, and study materials
-        uploaded by STEM Officers.
-    </p>
-
+    <p>Browse reviewers, notes, and study materials uploaded by STEM Officers.</p>
     <div style="text-align:center;">
-
-        <img src="logo.jpg"
-             alt="STEM Club Logo"
-             style="width:300px;
-                    margin-top:20px;
-                    border-radius:10px;">
-
+        <img src="logo.jpg" alt="STEM Club Logo" style="width:300px; margin-top:20px; border-radius:10px;">
     </div>
-
 </section>
 
-
-<br><br><br><br><br>
-
-
 <footer>
-    © 2026 STEMArchive |
-    The Cabatuan National High School STEM Club
+    © 2026 STEMArchive | The Cabatuan National High School STEM Club
 </footer>
 
-
 <script>
-
-/* =========================
-   ADMIN LOGIN
-========================= */
-
 let isAdmin = false;
 
-
 if (confirm("Log in as Admin?")) {
-
     let username = prompt("Username:");
     let password = prompt("Password:");
 
-    if (
-        username === "STEMCLUBADMINS" &&
-        password === "stem6767"
-    ) {
-
+    if (username === "STEMCLUBADMINS" && password === "stem6767") {
         isAdmin = true;
         alert("Welcome, Admin!");
-
-    }
-
-    else {
-
+    } else {
         alert("Viewing as Student.");
-
     }
 }
 
-
-/* =========================
-   PDF REVIEWERS
-========================= */
-
-/*
-    ADD YOUR PDF FILES HERE.
-
-    The PDFs must be inside:
-
-    reviewers/
-
-    folder in your GitHub repository.
-*/
-
-
 const reviewers = [
-
     {
         title: "PRACTICAL RESEARCH 2 Reviewer",
         file: "reviewers/biology.pdf"
     },
-
     {
         title: "Chemistry Reviewer",
         file: "reviewers/chemistry.pdf"
     },
-
     {
         title: "UCSP Reviewer",
         file: "reviewers/physics.pdf"
     },
-
     {
         title: "MIL Reviewer",
         file: "MEDIA-AND-INFORMATION-LITERACY.pdf"
     },
-
     {
         title: "PHILOSOPHY Reviewer",
         file: "reviewers/research.pdf"
     }
-
-    /*
-    ADD MORE HERE
-
-    You can add up to around 15 files.
-
-    Example:
-
-    ,
-    {
-        title: "Calculus Reviewer",
-        file: "reviewers/calculus.pdf"
-    }
-    */
-
 ];
 
-
-/* =========================
-   SAVE ANNOUNCEMENT
-========================= */
-
 function saveAnnouncement() {
-
-    let text =
-        document.getElementById(
-            "announcementText"
-        ).value;
-
-    localStorage.setItem(
-        "announcement",
-        text
-    );
-
+    let text = document.getElementById("announcementText").value;
+    localStorage.setItem("announcement", text);
     alert("Announcement saved!");
-
 }
-
-
-/* =========================
-   SAVE ACHIEVEMENT
-========================= */
 
 function saveAchievement() {
-
-    let text =
-        document.getElementById(
-            "achievementText"
-        ).value;
-
-    localStorage.setItem(
-        "achievement",
-        text
-    );
-
+    let text = document.getElementById("achievementText").value;
+    localStorage.setItem("achievement", text);
     alert("Achievement saved!");
-
 }
-
-
-/* =========================
-   SHOW CONTENT
-========================= */
 
 function showContent(section) {
-
-    let box =
-        document.getElementById("contentBox");
-
-
-    /* =====================
-       HOME
-    ===================== */
+    let box = document.getElementById("contentBox");
 
     if (section === "home") {
-
         box.innerHTML = `
-
             <h2>Home</h2>
-
-            <p>
-                Welcome to STEMArchive, a centralized
-                digital platform designed to support
-                students in their academic journey.
-            </p>
-
-            <p>
-                This website provides easy access to
-                organized reviewers, important announcements,
-                and essential learning materials.
-            </p>
-
-            <p>
-                It is built to help students stay updated,
-                prepared, and confident in their studies.
-            </p>
-
-            <p>
-                Explore the platform and stay ahead
-                in your academic goals.
-            </p>
-
+            <p>Welcome to STEMArchive, a centralized digital platform designed to support students in their academic journey.</p>
+            <p>This website provides easy access to organized reviewers, important announcements, and essential learning materials.</p>
+            <p>It is built to help students stay updated, prepared, and confident in their studies.</p>
+            <p>Explore the platform and stay ahead in your academic goals.</p>
         `;
-
     }
-
-
-    /* =====================
-       REVIEWERS
-    ===================== */
 
     if (section === "reviewers") {
-
         box.innerHTML = `
-
             <h2>📚 STEM Reviewers</h2>
-
-            <p>
-                Browse and access available STEM
-                learning materials.
-            </p>
-
+            <p>Browse and access available STEM learning materials.</p>
         `;
-
 
         if (reviewers.length === 0) {
-
-            box.innerHTML += `
-
-                <p>No reviewers available yet.</p>
-
-            `;
-
+            box.innerHTML += `<p>No reviewers available yet.</p>`;
         }
-
 
         reviewers.forEach(function(reviewer) {
-
             box.innerHTML += `
-
                 <div class="pdf-card">
-
-                    <h3>
-                        📄 ${reviewer.title}
-                    </h3>
-
-                    <a
-                        href="${reviewer.file}"
-                        target="_blank"
-                        class="button">
-
-                        Open PDF
-
-                    </a>
-
+                    <h3>📄 ${reviewer.title}</h3>
+                    <a href="${reviewer.file}" target="_blank" class="button">Open PDF</a>
                 </div>
-
             `;
-
         });
-
     }
-
-
-    /* =====================
-       ANNOUNCEMENTS
-    ===================== */
 
     if (section === "announcements") {
-
-        let announcement =
-            localStorage.getItem("announcement") ||
-            "No announcements yet.";
-
+        let announcement = localStorage.getItem("announcement") || "No announcements yet.";
 
         box.innerHTML = `
-
             <h2>📢 Announcements</h2>
-
             <p>${announcement}</p>
-
         `;
 
-
         if (isAdmin) {
-
             box.innerHTML += `
-
-                <textarea
-                    id="announcementText"
-                    rows="8"
-                    style="width:90%;"
-                >${announcement}</textarea>
-
+                <textarea id="announcementText" rows="8" style="width:90%;">${announcement}</textarea>
                 <br><br>
-
-                <button
-                    class="button"
-                    onclick="saveAnnouncement()">
-
-                    Save Announcement
-
-                </button>
-
+                <button class="button" onclick="saveAnnouncement()">Save Announcement</button>
             `;
-
         }
-
     }
-
-
-    /* =====================
-       ACHIEVEMENTS
-    ===================== */
 
     if (section === "achievements") {
-
-        let achievement =
-            localStorage.getItem("achievement") ||
-            "No achievements yet.";
-
+        let achievement = localStorage.getItem("achievement") || "No achievements yet.";
 
         box.innerHTML = `
-
             <h2>🏆 STEM Achievements</h2>
-
             <p>${achievement}</p>
-
         `;
 
-
         if (isAdmin) {
-
             box.innerHTML += `
-
-                <textarea
-                    id="achievementText"
-                    rows="8"
-                    style="width:90%;"
-                >${achievement}</textarea>
-
+                <textarea id="achievementText" rows="8" style="width:90%;">${achievement}</textarea>
                 <br><br>
-
-                <button
-                    class="button"
-                    onclick="saveAchievement()">
-
-                    Save Achievement
-
-                </button>
-
+                <button class="button" onclick="saveAchievement()">Save Achievement</button>
             `;
-
         }
-
     }
 
-
     box.style.display = "block";
-
 }
-
 </script>
 
 </body>
