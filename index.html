@@ -199,7 +199,7 @@ async function showContent(section) {
 
     if (section === "reviewers") {
         box.innerHTML = `
-            <h2>📚 STEM Reviewers</h2>
+            <h2> STEM Reviewers</h2>
             <p>Browse and access available STEM learning materials.</p>
         `;
 
@@ -210,7 +210,7 @@ async function showContent(section) {
         reviewers.forEach(function(reviewer) {
             box.innerHTML += `
                 <div class="pdf-card">
-                    <h3>📄 ${reviewer.title}</h3>
+                    <h3> ${reviewer.title}</h3>
                     <a href="${reviewer.file}" download class="button">Download PDF</a>
                 </div>
             `;
@@ -218,7 +218,7 @@ async function showContent(section) {
     }
 
     if (section === "announcements") {
-        box.innerHTML = `<h2>📢 Announcements</h2><p>Loading latest announcements...</p>`;
+        box.innerHTML = `<h2> Announcements</h2><p>Loading latest announcements...</p>`;
         let data = await fetchBinData();
         let announcement = data.announcement || "No announcements yet.";
 
@@ -237,12 +237,12 @@ async function showContent(section) {
     }
 
     if (section === "achievements") {
-        box.innerHTML = `<h2>🏆 STEM Achievements</h2><p>Loading latest achievements...</p>`;
+        box.innerHTML = `<h2> STEM Achievements</h2><p>Loading latest achievements...</p>`;
         let data = await fetchBinData();
         let achievement = data.achievement || "No achievements yet.";
 
         box.innerHTML = `
-            <h2>🏆 STEM Achievements</h2>
+            <h2> STEM Achievements</h2>
             <p>${achievement}</p>
         `;
 
