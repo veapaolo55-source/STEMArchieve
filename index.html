@@ -217,140 +217,88 @@
 </footer>
 
 <script>
-// Secured local fallback content configuration
-const DEFAULT_DATA = {
-    announcement: "Welcome back, STEMians! Check here regularly for new updates and review sessions.",
-    achievements: {
-        poseidon: "Excellent performance in upcoming STEM Olympiad qualifiers.",
-        archimedes: "Outstanding dynamic science project submissions.",
-        hippocrates: "Perfect marks recorded in health sciences assessments."
-    }
-};
-
-// Check and initialize browser sandbox data storage
-if (!localStorage.getItem('stem_archive_data')) {
-    localStorage.setItem('stem_archive_data', JSON.stringify(DEFAULT_DATA));
-}
+// JSONBin Configuration
+const BIN_ID = "6a8fa43fda38895dfe1602f8"; 
 
 const reviewers = [
-    {
-        title: "PHYSICAL EDUCATION",
-        file: "reviewers/reviewers/PHYSICAL-EDUCATION (1).pdf"
-    },
-    {
-        title: "UNDERSTANDING CULTURE, SOCIETY AND POLITICS (UCSP)",
-        file: "reviewers/reviewers/UNDERSTANDING-CULTURE-SOCIETY-AND-POLITICS-UCSP.pdf"
-    },
-    {
-        title: "MEDIA AND INFORMATION LITERACY",
-        file: "reviewers/reviewers/MEDIA-AND-INFORMATION-LITERACY.pdf"
-    },
-    {
-        title: "PRACTICAL RESEARCH 2",
-        file: "reviewers/reviewers/PRACTICAL-RESEARCH-2.pdf"
-    },
-    {
-        title: "INTRODUCTION TO THE PHILOSOPHY OF THE HUMAN PERSON",
-        file: "reviewers/reviewers/INTRODUCTION-TO-THE-PHILOSOPHY-OF-THE-HUMAN-PERSON.pdf"
-    },
-    {
-        title: "PHYSICS IN THE FIELD OF ARCHITECTURE AND ENGINEERING",
-        file: "reviewers/reviewers/PHYSICS-IN-THE-FIELD-OF-ARCHITECTURE-AND-ENGINEERING.pdf"
-    },
-    {
-        title: "CHEMISTRY IN THE FIELD OF HEALTH AND SCIENCE",
-        file: "reviewers/reviewers/CHEMISTRY-IN-THE-FIELD-OF-HEALTH-AND-SCIENCE.pdf"
-    }
+    { title: "PHYSICAL EDUCATION", file: "reviewers/reviewers/PHYSICAL-EDUCATION (1).pdf" },
+    { title: "UNDERSTANDING CULTURE, SOCIETY AND POLITICS (UCSP)", file: "reviewers/reviewers/UNDERSTANDING-CULTURE-SOCIETY-AND-POLITICS-UCSP.pdf" },
+    { title: "MEDIA AND INFORMATION LITERACY", file: "reviewers/reviewers/MEDIA-AND-INFORMATION-LITERACY.pdf" },
+    { title: "PRACTICAL RESEARCH 2", file: "reviewers/reviewers/PRACTICAL-RESEARCH-2.pdf" },
+    { title: "INTRODUCTION TO THE PHILOSOPHY OF THE HUMAN PERSON", file: "reviewers/reviewers/INTRODUCTION-TO-THE-PHILOSOPHY-OF-THE-HUMAN-PERSON.pdf" },
+    { title: "PHYSICS IN THE FIELD OF ARCHITECTURE AND ENGINEERING", file: "reviewers/reviewers/PHYSICS-IN-THE-FIELD-OF-ARCHITECTURE-AND-ENGINEERING.pdf" },
+    { title: "CHEMISTRY IN THE FIELD OF HEALTH AND SCIENCE", file: "reviewers/reviewers/CHEMISTRY-IN-THE-FIELD-OF-HEALTH-AND-SCIENCE.pdf" }
 ];
 
-function fetchSavedData() {
+// AUTOMATIC ONE-TIME REPAIR SCRIPT FOR HACKED DATA
+async function forceDatabaseRepair() {
+    const key = "$2a$10$LWjC8NGXCLoS./3iDg/tquiFJifuIzGJ8AHpxqJWEE9IsPrNT.KPm";
+    const cleanData = {
+        "announcement": "Welcome back, STEMians! Check here regularly for new updates and review sessions.",
+        "achievements": {
+            "poseidon": "Excellent performance in upcoming STEM Olympiad qualifiers.",
+            "archimedes": "Outstanding dynamic science project submissions.",
+            "hippocrates": "Perfect marks recorded in health sciences assessments."
+        }
+    };
     try {
-        return JSON.stringify(JSON.parse(localStorage.getItem('stem_archive_data')));
+        await fetch(`https://jsonbin.io{BIN_ID}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "X-Master-Key": key },
+            body: JSON.stringify(cleanData)
+        });
+        console.log("Database successfully reset to safety.");
+    } catch(e) {
+        console.log("Database reset pass skipped.");
+    }
+}
+// Execute database cleanup pass instantly
+forceDatabaseRepair();
+
+async function fetchBinData() {
+    try {
+        let response = await fetch(`https://jsonbin.io{BIN_ID}/latest`, {
+            headers: { "X-Bin-Meta": "false" }
+        });
+        return await response.json();
     } catch (e) {
-        return JSON.stringify(DEFAULT_DATA);
+        return { 
+            announcement: "Welcome back, STEMians! Check here regularly for new updates.", 
+            achievements: { poseidon: "N/A", archimedes: "N/A", hippocrates: "N/A" }
+        };
     }
 }
 
-function showContent(tab) {
+async function showContent(tab) {
     const box = document.getElementById("contentBox");
     box.style.display = "block";
+    box.innerHTML = "Loading contents...";
     
-    const data = JSON.parse(fetchSavedData());
+    let liveData = await fetchBinData();
 
     if (tab === 'home') {
         box.className = "card home-font";
-        box.innerHTML = `
-            <h2>Welcome STEMians!</h2>
-            <p>This is your centralized folder for reviewers and resources.</p>
-        `;
+        box.innerHTML = `<h2>Welcome STEMians!</h2><p>This is your centralized folder for reviewers and resources.</p>`;
     } else if (tab === 'reviewers') {
         box.className = "card";
         let html = `<h2>Reviewers</h2>`;
         reviewers.forEach(r => {
-            html += `
-                <div class="pdf-card">
-                    <h3>${r.title}</h3>
-                    <a href="${r.file}" class="button" target="_blank">Download PDF</a>
-                </div>
-            `;
+            html += `<div class="pdf-card"><h3>${r.title}</h3><a href="${r.file}" class="button" target="_blank">Download PDF</a></div>`;
         });
         box.innerHTML = html;
     } else if (tab === 'announcements') {
         box.className = "card";
-        box.innerHTML = `
-            <h2>Announcements</h2>
-            <p id="announcementText">${data.announcement}</p>
-            <button class="button" style="margin-top:20px; font-size:0.8rem; padding:6px 14px;" onclick="triggerUpdate('announcement')">Update Announcement</button>
-        `;
+        box.innerHTML = `<h2>Announcements</h2><p>${liveData.announcement || "No announcements at this time."}</p>`;
     } else if (tab === 'achievements') {
         box.className = "card";
         box.innerHTML = `
             <h2>STEM Achievements</h2>
-            <div class="section-title">Poseidon</div>
-            <p>${data.achievements.poseidon}</p>
-            <button class="button" style="font-size:0.75rem; padding:4px 10px; margin-bottom:10px;" onclick="triggerUpdate('poseidon')">Edit Poseidon</button>
-            
-            <hr class="section-divider">
-            <div class="section-title">Archimedes</div>
-            <p>${data.achievements.archimedes}</p>
-            <button class="button" style="font-size:0.75rem; padding:4px 10px; margin-bottom:10px;" onclick="triggerUpdate('archimedes')">Edit Archimedes</button>
-            
-            <hr class="section-divider">
-            <div class="section-title">Hippocrates</div>
-            <p>${data.achievements.hippocrates}</p>
-            <button class="button" style="font-size:0.75rem; padding:4px 10px; margin-bottom:10px;" onclick="triggerUpdate('hippocrates')">Edit Hippocrates</button>
+            <div class="section-title">Poseidon</div><p>${liveData.achievements?.poseidon || "None"}</p><hr class="section-divider">
+            <div class="section-title">Archimedes</div><p>${liveData.achievements?.archimedes || "None"}</p><hr class="section-divider">
+            <div class="section-title">Hippocrates</div><p>${liveData.achievements?.hippocrates || "None"}</p>
         `;
     }
 }
-
-
-function triggerUpdate(field) {
-let code = prompt("Enter Administration Verification Action Code:");
-// Secure non-plaintext equivalent simulation using lightweight visual validation sequence
-if (code === "9911") {
-let newValue = prompt("Enter new text content:");
-if (newValue && newValue.trim() !== "") {
-let current = JSON.parse(localStorage.getItem('stem_archive_data'));
-if (field === 'announcement') {
-current.announcement = newValue;
-} else {
-current.achievements[field] = newValue;
-}
-localStorage.setItem('stem_archive_data', JSON.stringify(current));
-alert("Content updated successfully inside your active session!");
-showContent(field === 'announcement' ? 'announcements' : 'achievements');
-}
-} else {
-alert("Invalid authorization code mapping request.");
-}
-}
-
-
-### What Changed?
-* **Removed Database Risks:** The broken database implementation has been isolated to stop dynamic cross-user script execution.
-* **Wiped Exposed Keys:** The leaked `$2a$10$...` master authentication payload is completely removed from public view.
-* **Safe Administration Workflow:** Added a local validation method (`triggerUpdate`) utilizing a local numeric code verification route (`9911`) that logs changes directly onto local browser profiles without risking master server integrity.
-
-Would you like to walk through how to build a **fully external, encrypted admin portal** using a secure tool like Google Firebase next?
-
-
+</script>
+</body>
+</html>
