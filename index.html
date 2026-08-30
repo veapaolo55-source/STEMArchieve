@@ -226,45 +226,26 @@ const reviewers = [
     { title: "MEDIA AND INFORMATION LITERACY", file: "reviewers/reviewers/MEDIA-AND-INFORMATION-LITERACY.pdf" },
     { title: "PRACTICAL RESEARCH 2", file: "reviewers/reviewers/PRACTICAL-RESEARCH-2.pdf" },
     { title: "INTRODUCTION TO THE PHILOSOPHY OF THE HUMAN PERSON", file: "reviewers/reviewers/INTRODUCTION-TO-THE-PHILOSOPHY-OF-THE-HUMAN-PERSON.pdf" },
-    { title: "PHYSICS IN THE FIELD OF ARCHITECTURE AND ENGINEERING", file: "reviewers/reviewers/PHYSICS-IN-THE-FIELD-OF-ARCHITECTURE-AND-ENGINEERING.pdf" },
+    { title: "PHYSICS IN THE FIELD of ARCHITECTURE AND ENGINEERING", file: "reviewers/reviewers/PHYSICS-IN-THE-FIELD-OF-ARCHITECTURE-AND-ENGINEERING.pdf" },
     { title: "CHEMISTRY IN THE FIELD OF HEALTH AND SCIENCE", file: "reviewers/reviewers/CHEMISTRY-IN-THE-FIELD-OF-HEALTH-AND-SCIENCE.pdf" }
 ];
 
-// AUTOMATIC ONE-TIME REPAIR SCRIPT FOR HACKED DATA
-async function forceDatabaseRepair() {
-    const key = "$2a$10$LWjC8NGXCLoS./3iDg/tquiFJifuIzGJ8AHpxqJWEE9IsPrNT.KPm";
-    const cleanData = {
-        "announcement": "Welcome back, STEMians! Check here regularly for new updates and review sessions.",
-        "achievements": {
-            "poseidon": "Excellent performance in upcoming STEM Olympiad qualifiers.",
-            "archimedes": "Outstanding dynamic science project submissions.",
-            "hippocrates": "Perfect marks recorded in health sciences assessments."
-        }
-    };
-    try {
-        await fetch(`https://jsonbin.io{BIN_ID}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json", "X-Master-Key": key },
-            body: JSON.stringify(cleanData)
-        });
-        console.log("Database successfully reset to safety.");
-    } catch(e) {
-        console.log("Database reset pass skipped.");
-    }
-}
-// Execute database cleanup pass instantly
-forceDatabaseRepair();
-
+// Fetches database data securely without providing or revealing private keys
 async function fetchBinData() {
     try {
         let response = await fetch(`https://jsonbin.io{BIN_ID}/latest`, {
             headers: { "X-Bin-Meta": "false" }
         });
-        return await response.json();
+        let result = await response.json();
+        return result.record || result;
     } catch (e) {
         return { 
             announcement: "Welcome back, STEMians! Check here regularly for new updates.", 
-            achievements: { poseidon: "N/A", archimedes: "N/A", hippocrates: "N/A" }
+            achievements: {
+                poseidon: "Updates coming soon.",
+                archimedes: "Updates coming soon.",
+                hippocrates: "Updates coming soon."
+            }
         };
     }
 }
